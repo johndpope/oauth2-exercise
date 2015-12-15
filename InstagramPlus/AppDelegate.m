@@ -1,12 +1,13 @@
 //
 //  AppDelegate.m
-//  InstagramPlus
+//  ImageViewerPlus
 //
 //  Created by Chris on 11/6/15.
 //  Copyright © 2015 Chris. All rights reserved.
 //
 
 #import "AppDelegate.h"
+#import "NXOAuth2.h"
 
 @interface AppDelegate ()
 
@@ -17,7 +18,18 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    [[NXOAuth2AccountStore sharedStore] setClientID:@"4208acfa0ba743b7817eb7a2fa3104ad"
+                                             secret:@"ff12ee874fc14c6ba39727a0b67fa1d3"
+                                   authorizationURL:[NSURL URLWithString:@"https://api.instagram.com/oauth/authorize"]
+                                           tokenURL:[NSURL URLWithString:@"https://api.instagram.com/oauth/access_token"]
+                                        redirectURL:[NSURL URLWithString:@"scheme://thing.com"]
+                                     forAccountType:@"Instagram"];
     return YES;
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(nonnull NSURL *)url options:(nonnull NSDictionary<NSString *,id> *)options {
+    NSLog(@"We received a callback");
+    return [[NXOAuth2AccountStore sharedStore] handleRedirectURL:url];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
